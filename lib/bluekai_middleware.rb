@@ -1,5 +1,5 @@
-require "bluekai_middleware/version"
+require 'bluekai_middleware/version'
 
 module BluekaiMiddleware
-  # Your code goes here...
+  autoload :LogSubscriber, 'bluekai_middleware/log_subscriber'
 end
