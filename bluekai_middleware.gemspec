@@ -4,7 +4,7 @@ require 'bluekai_middleware/version'
 
 Gem::Specification.new do |s|
   s.name        = 'bluekai_middleware'
-  s.version     = BluekaiMiddleware::VERSION
+  s.version     = BlueKaiMiddleware::VERSION
   s.authors     = ['Jason Petersen']
   s.email       = ['jpetersen@bluekai.com']
   s.license     = 'Copyright (c) 2012 Blue Kai, Inc.'
