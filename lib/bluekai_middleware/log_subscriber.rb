@@ -38,13 +38,13 @@ module BlueKaiMiddleware
       info "  #{name}  #{request}"
     end
 
+    def logger
+      Rails.logger
+    end
+
     private
       def odd?
         @odd_or_even = !@odd_or_even
-      end
-
-      def logger
-        Rails.logger
       end
     end
 end
