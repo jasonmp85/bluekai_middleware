@@ -3,6 +3,8 @@
 require 'base64'
 require 'openssl'
 
+require 'faraday/middleware'
+
 module BlueKaiMiddleware
   # Implements the algorithm described in the confluence document
   # kb.bluekai.com/display/PD/Authentication+and+Authorization to
