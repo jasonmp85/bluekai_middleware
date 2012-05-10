@@ -1,24 +1,24 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
-require "bluekai_middleware/version"
+$:.push File.expand_path('../lib', __FILE__)
+require 'bluekai_middleware/version'
 
 Gem::Specification.new do |s|
-  s.name        = "bluekai_middleware"
-  s.version     = BluekaiMiddleware::VERSION
-  s.authors     = ["Jason Petersen"]
-  s.email       = ["jasonmp85@gmail.com"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.name        = 'bluekai_middleware'
+  s.version     = BlueKaiMiddleware::VERSION
+  s.authors     = ['Jason Petersen']
+  s.email       = ['jpetersen@bluekai.com']
+  s.license     = 'Copyright (c) 2012 Blue Kai, Inc.'
+  s.homepage    = 'http://bluekai.com/'
+  s.summary     = %q{Common code for interacting with BlueKai services}
+  s.description = %q{Includes Faraday middlewares, log formatters, and signing algorithms useful for any user of BlueKai services}
 
-  s.rubyforge_project = "bluekai_middleware"
+  s.rubyforge_project = 'bluekai_middleware'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ["lib"]
+  s.require_paths = ['lib']
 
-  # specify any dependencies here; for example:
-  # s.add_development_dependency "rspec"
-  # s.add_runtime_dependency "rest-client"
+  s.add_dependency 'activesupport', '~> 3.1'
+  s.add_dependency 'faraday',       '~> 0.7.6'
 end

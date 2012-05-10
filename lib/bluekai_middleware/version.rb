@@ -1,3 +1,3 @@
-module BluekaiMiddleware
-  VERSION = "0.0.1"
+module BlueKaiMiddleware
+  VERSION = '0.1.0'
 end
