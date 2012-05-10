@@ -26,7 +26,9 @@ module BlueKaiMiddleware
       url     = env[:url]
       context = SigningContext.new(env, @private_key)
 
-      if @superuser && !(url.query_values.has_key?('bkpid') || url.query_values.has_key?('pid'))
+      query_keys = (url.query_values || {}).keys
+
+      if @superuser && (%w[pid bkpid] & query_keys).empty?
         raise 'bkpid or pid required if superuser'
       end
 
