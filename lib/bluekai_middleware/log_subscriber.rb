@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'active_support/log_subscriber'
+require 'active_support'
 
 module BlueKaiMiddleware
   # BlueKaiMiddleware::LogSubscriber is an object meant to consume notifications produced
@@ -9,7 +9,7 @@ module BlueKaiMiddleware
   #
   # To register this class for use, create an initializer with a line like:
   #
-  #   Faraday::LogSubscriber.attach_to :faraday
+  #   BlueKaiMiddleware::LogSubscriber.attach_to :faraday
   #
   # This class is intended to provide a unified logging format for http calls made using
   # Faraday from within Rails.
