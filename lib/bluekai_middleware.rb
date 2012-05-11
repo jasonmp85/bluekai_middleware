@@ -3,6 +3,7 @@ require 'bluekai_middleware/version'
 module BlueKaiMiddleware
   autoload :Authenticate,  'bluekai_middleware/authenticate'
   autoload :LogSubscriber, 'bluekai_middleware/log_subscriber'
+  autoload :RaiseError,    'bluekai_middleware/raise_error'
 
   class HTTPError < StandardError
     attr_reader :status, :body

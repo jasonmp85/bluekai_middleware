@@ -1,5 +1,7 @@
 # encoding: UTF-8
 
+require 'faraday'
+
 module BlueKaiMiddleware
   # Raises a server or client error depending upon the response status
   class RaiseError < Faraday::Response::Middleware
