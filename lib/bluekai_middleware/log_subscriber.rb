@@ -9,7 +9,7 @@ module BlueKaiMiddleware
   #
   # To register this class for use, create an initializer with a line like:
   #
-  #   Faraday::LogSubscriber.attach_to :faraday
+  #   BlueKaiMiddleware::LogSubscriber.attach_to :faraday
   #
   # This class is intended to provide a unified logging format for http calls made using
   # Faraday from within Rails.
