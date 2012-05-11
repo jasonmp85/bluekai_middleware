@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'activesupport', '~> 3.1'
   s.add_dependency 'faraday',       '~> 0.7.6'
+  s.add_dependency 'rack',          '~> 1.3'
 end
