@@ -3,7 +3,7 @@
 require 'base64'
 require 'openssl'
 
-require 'faraday/middleware'
+require 'faraday'
 
 module BlueKaiMiddleware
   # Implements the algorithm described in the confluence document

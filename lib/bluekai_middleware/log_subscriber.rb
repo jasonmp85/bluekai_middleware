@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'active_support/log_subscriber'
+require 'active_support'
 
 module BlueKaiMiddleware
   # BlueKaiMiddleware::LogSubscriber is an object meant to consume notifications produced
