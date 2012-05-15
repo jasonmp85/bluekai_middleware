@@ -16,7 +16,7 @@ module BlueKaiMiddleware
         status, body = *env.values_at(:status, :body)
 
         if status == 200 && body.is_a?(Hash)
-          env.status = 400 if body['status'] != SUCCESS_STATUS
+          env[:status] = 400 if body['status'] != SUCCESS_STATUS
         end
       end
     end
