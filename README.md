@@ -79,5 +79,30 @@ between `BlueKaiMiddleware::ClientError` for 400-class errors and
 the response body and status as attributes and have the standard HTTP
 message for their status as their exception message.
 
+#### `BlueKaiMiddleware::RaiseError::StatusCodeFix`
+
+Unfortunately, some APIs return a 200 status code even for requests no
+sane developer would consider "successful". They instead put a status
+field in the response body. This is being worked on, but until it's
+fixed, users can add the `StatusCodeFix` middleware, which will check
+the body status and fix the HTTP status when necessary:
+
+```ruby
+@conn = Faraday.new(:url => "http://example.bluekai.com/") do |builder|
+  builder.use      BlueKaiMiddleware::RaiseError
+  builder.use      FaradayMiddleware::RaiseError::StatusCodeFix
+  builder.use      FaradayMiddleware::ParseJson, :content_type => /\bjson\z/
+
+  builder.adapter  :net_http
+end
+```
+
+Remember that response middleware is read bottom-to-top, so here we see
+the response first being parsed as JSON (if possible). Then the status
+code fix will look in the parsed body (if it's a Hash and the HTTP code
+was 200) for a status field. If the value does not represent a success,
+the HTTP code is changed to a 400 so that the RaiseError middleware can
+do the right thing.
+
 [Faraday]: https://github.com/technoweenie/faraday
 [FaradayMiddleware gem]: https://github.com/pengwynn/faraday_middleware
