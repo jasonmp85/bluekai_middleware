@@ -52,7 +52,7 @@ module BlueKaiMiddleware
         @body   = env[:body]
         @url    = env[:url]
         @path   = @url.path
-        @query  = @url.query_values.sort.map(&:last).map { |s| CGI.escape(s) }
+        @query  = (@url.query_values || {}).sort.map(&:last).map { |s| CGI.escape(s) }
 
         @key    = private_key
         @digest = OpenSSL::Digest.new('sha256')
