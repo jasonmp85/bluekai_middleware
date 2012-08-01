@@ -28,10 +28,6 @@ module BlueKaiMiddleware
 
       query_keys = (url.query_values || {}).keys
 
-      if @superuser && (%w[pid bkpid] & query_keys).empty?
-        raise 'bkpid or pid required if superuser'
-      end
-
       extra_parameters = {
         bkuid: @user_key,
         bksig: context.signature
