@@ -12,14 +12,15 @@ Gem::Specification.new do |s|
   s.summary     = %q{Common code for interacting with BlueKai services}
   s.description = %q{Includes Faraday middlewares, log formatters, and signing algorithms useful for any user of BlueKai services}
 
-  s.rubyforge_project = 'bluekai_middleware'
-
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ['lib']
+  s.test_files    = `git ls-files -- {spec}/*`.split("\n")
 
-  s.add_dependency 'activesupport', '~> 3.1'
+  s.add_dependency 'activesupport', '~> 3.1.1'
   s.add_dependency 'faraday',       '~> 0.7.6'
   s.add_dependency 'rack',          '~> 1.3'
+
+  s.add_development_dependency 'ci_reporter',        '~> 1.7.0'
+  s.add_development_dependency 'rdiscount',          '~> 1.6.8'
+  s.add_development_dependency 'rspec',              '~> 2.11.0'
+  s.add_development_dependency 'yard',               '~> 0.8.2.1'
 end
