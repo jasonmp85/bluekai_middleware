@@ -1,4 +1,4 @@
 module BlueKaiMiddleware
   # The version of this gem. Conforms to the {http://semver.org/ Semantic Versioning} guidelines.
-  VERSION = '0.3.3'
+  VERSION = '0.4.0.pre'
 end

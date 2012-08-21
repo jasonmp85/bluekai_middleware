@@ -13,10 +13,9 @@ module BlueKaiMiddleware
     # @param [#call] app the next middleware in the chain, or the innermost app
     # @param [String] user_key a BlueKai user's public key, to be included in the params
     # @param [String] private_key a BlueKai user's private key, to be used for signing
-    # @param [boolean] superuser **deprecated**
-    def initialize(app, user_key, private_key, superuser = false)
+    def initialize(app, user_key, private_key)
       super(app)
-      @user_key, @private_key, @superuser = user_key, private_key, superuser
+      @user_key, @private_key = user_key, private_key
     end
 
     # Calculates the signature (`bksig`) and adds it and a user key (`bkuid`) to the outgoing
