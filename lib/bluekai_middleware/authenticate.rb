@@ -6,22 +6,23 @@ require 'openssl'
 require 'faraday'
 
 module BlueKaiMiddleware
-  # Implements the algorithm described in the confluence document
-  # kb.bluekai.com/display/PD/Authentication+and+Authorization to
-  # sign requests made to BlueKai services.
+  # Implements BlueKai's {http://kb.bluekai.com/display/PD/Authentication+and+Authorization
+  # signing algorithm} in order to facilitate making authenticated calls to BlueKai web services.
   class Authenticate < Faraday::Middleware
-
-    # Construct a new Authenticate middleware. Requires a user key
-    # and user private key. If the optional superuser parameter is
-    # true, then a bkpid must be included on each call.
+    # Creates a new Authenticate middleware instance.
+    # @param [#call] app the next middleware in the chain, or the innermost app
+    # @param [String] user_key a BlueKai user's public key, to be included in the params
+    # @param [String] private_key a BlueKai user's private key, to be used for signing
+    # @param [boolean] superuser **deprecated**
     def initialize(app, user_key, private_key, superuser = false)
       super(app)
       @user_key, @private_key, @superuser = user_key, private_key, superuser
     end
 
-    # Calculates the signature (bksig) and adds it and a user key
-    # (bkuid) to the outgoing request's query parameters. No
-    # computation is performed during the response phase.
+    # Calculates the signature (`bksig`) and adds it and a user key (`bkuid`) to the outgoing
+    # request's query parameters. No computation is performed during the response phase.
+    # @param [Hash] env a hash with details about the request
+    # @return [void]
     def call(env)
       url     = env[:url]
       context = SigningContext.new(env, @private_key)
@@ -37,14 +38,17 @@ module BlueKaiMiddleware
       @app.call(env)
     end
 
-    # Only one Authenticate instance is created per Faraday instance,
+    # Only one Authenticate instance is created per Faraday client,
     # but each request needs a fresh digest object. This class wraps
     # the context needed to sign each request.
     class SigningContext
+      # @!attribute signature
+      #   @return [signature] the calculated signature of this signing context
       attr_reader :signature
 
-      # Creates a new SigningContext. private_key is expected to be
-      # a string directly used during signing.
+      # Creates a new SigningContext.
+      # @param [Hash] env a hash with details about the request
+      # @param [String] private_key a BlueKai user's private key, to be used for signing
       def initialize(env, private_key)
         @method = (env[:method] || '').upcase
         @body   = env[:body]
