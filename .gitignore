@@ -1,4 +1,8 @@
-*.gem
-.bundle
+.bundle/
+.DS_Store
+.yardoc/
+doc/
 Gemfile.lock
-pkg/*
+log/*.log
+pkg/
+spec/reports/

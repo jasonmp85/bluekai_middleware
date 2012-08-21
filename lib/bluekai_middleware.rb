@@ -1,4 +1,5 @@
 require 'bluekai_middleware/version'
+require 'rack/utils'
 
 module BlueKaiMiddleware
   autoload :Authenticate,  'bluekai_middleware/authenticate'
