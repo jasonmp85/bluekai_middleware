@@ -5,3 +5,4 @@ doc/
 Gemfile.lock
 log/*.log
 pkg/
+spec/reports/
