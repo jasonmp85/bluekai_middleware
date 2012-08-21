@@ -1,4 +1,4 @@
-### 0.4.0 / 2012-08-21 (unreleased)
+### 0.4.0 / 2012-08-21
 
 * Removed `superuser` parameter from {BlueKaiMiddleware::Authenticate#initialize}
 
