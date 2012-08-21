@@ -6,6 +6,8 @@ describe BlueKaiMiddleware::RaiseError do
   let(:instance) { described_class.new }
   subject { instance }
 
+  it { should be_a_kind_of Faraday::Response::Middleware }
+
   describe '#on_complete' do
     let(:response)     { { status: status, body: 'Document body' } }
     let(:on_complete) { instance.on_complete(response) }
@@ -34,6 +36,8 @@ end
 describe BlueKaiMiddleware::RaiseError::StatusCodeFix do
   let(:instance) { described_class.to_s; described_class.new }
   subject { instance }
+
+  it { should be_a_kind_of Faraday::Response::Middleware }
 
   describe 'a response passed to #on_complete' do
     let(:response) { { status: status, body: body } }
