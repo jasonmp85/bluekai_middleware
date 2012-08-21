@@ -41,10 +41,12 @@ module BlueKaiMiddleware
     # but each request needs a fresh digest object. This class wraps
     # the context needed to sign each request.
     class SigningContext
+      attr_reader :signature
+
       # Creates a new SigningContext. private_key is expected to be
       # a string directly used during signing.
       def initialize(env, private_key)
-        @method = env[:method].try(:upcase)
+        @method = (env[:method] || '').upcase
         @body   = env[:body]
         @url    = env[:url]
         @path   = @url.path
@@ -55,10 +57,12 @@ module BlueKaiMiddleware
       end
 
       def signature
-        data      = [@method.try(:upcase), @path, @query, @body].join
-        signature = OpenSSL::HMAC.digest(@digest, @key, data)
-        # strict_encode doesn't add a line-break like encode does
-        Base64.strict_encode64(signature)
+        @signature ||= begin
+          data      = [@method, @path, @query, @body].join
+          signature = OpenSSL::HMAC.digest(@digest, @key, data)
+          # strict_encode doesn't add a line-break like encode does
+          Base64.strict_encode64(signature)
+        end
       end
     end
   end

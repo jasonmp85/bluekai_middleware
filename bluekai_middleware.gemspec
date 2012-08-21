@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'faraday',       '~> 0.7.6'
   s.add_dependency 'rack',          '~> 1.3'
 
+  s.add_development_dependency 'addressable', '~> 2.3.2'
   s.add_development_dependency 'ci_reporter', '~> 1.7.0'
   s.add_development_dependency 'rdiscount',   '~> 1.6.8'
   s.add_development_dependency 'rake',        '~> 0.9.2.2'
