@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# ===========
+# = Release =
+# ===========
+#
+# This script will release the latest version of the gem. A username
+# and password must be provided.
+
+SCRIPTDIR=$(dirname $0)
+BASEDIR=$(dirname $SCRIPTDIR)
+PKGDIR="${BASEDIR}/pkg"
+GEMSURL='https://gems.bluekai.com/upload'
+
+while getopts 'p:u:s' opt; do
+  case $opt in
+    p)
+      pass=$OPTARG
+      ;;
+    u)
+      user=$OPTARG
+      ;;
+    s)
+      badbranch=0
+      ;;
+  esac
+done
+
+if [ "x" == "x$pass" ]; then
+  echo '-p [option] is required' 1>&2
+  exit 64
+elif [ "x" == "x$user" ]; then
+  echo '-u [option] is required' 1>&2
+  exit 64
+fi
+
+gemname=`ls -tr ${PKGDIR} | tail -n 1`
+gemfile="${PKGDIR}/${gemname}"
+
+echo "Determined latest build artifact: ${gemfile}" 1>&2
+
+if [ -f $latest ]; then
+  echo "Uploading to ${GEMSURL}" 1>&2
+
+  httpcode=`curl --basic --user ${user}:${pass} --form file=@${gemfile} --output /dev/null --silent --write-out '%{http_code}' ${GEMSURL}`
+
+  case $? in
+    0)
+      case $httpcode in
+        200)
+          echo "This build already on server!" 1>&2
+          echo $gemname
+          exit
+          ;;
+        302)
+          echo "Release successful!" 1>&2
+          echo $gemname
+          exit
+          ;;
+        409)
+          echo "Version ${gemname} already released and differs from this build" 1>&2
+          exit 73
+          ;;
+        *)
+          echo "${GEMSURL} returned unexpected HTTP code ${httpcode}" 1>&2
+          exit 69
+          ;;
+      esac
+      ;;
+    *)
+      echo "Curl returned with abnormal status $?" 1>&2
+      exit 70
+      ;;
+  esac
+else
+  echo "Problem reading build artifact: ${gemfile}" 1>&2
+  exit 66
+fi

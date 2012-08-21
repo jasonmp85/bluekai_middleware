@@ -73,8 +73,8 @@ code ≥ 400. You'd think this'd be built-in, right?
 end
 ```
 
-You can catch `BlueKaiMiddleware::HTTPError` for all errors, or pick
-between `BlueKaiMiddleware::ClientError` for 400-class errors and 
+You can rescue `BlueKaiMiddleware::HTTPError` for all errors, or pick
+between `BlueKaiMiddleware::ClientError` for 400-class errors and
 `BlueKaiMiddleware::ServerError` for 500-class ones. All errors provide
 the response body and status as attributes and have the standard HTTP
 message for their status as their exception message.

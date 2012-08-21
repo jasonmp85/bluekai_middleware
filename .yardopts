@@ -1,0 +1,7 @@
+--no-private
+--hide-void-return
+
+--markup markdown
+--markup-provider rdiscount
+-
+CHANGELOG.md

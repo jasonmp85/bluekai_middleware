@@ -3,26 +3,30 @@
 require 'active_support'
 
 module BlueKaiMiddleware
-  # BlueKaiMiddleware::LogSubscriber is an object meant to consume notifications produced
-  # by an instance of FaradayMiddleware::Instrumentation (from the faraday_middleware
-  # gem).
+  # LogSubscriber is an object meant to consume notifications produced by an instance of
+  # `FaradayMiddleware::Instrumentation` (from {https://github.com/pengwynn/faraday_middleware
+  # faraday_middleware}).
   #
   # To register this class for use, create an initializer with a line like:
+  # ```ruby
+  # BlueKaiMiddleware::LogSubscriber.attach_to :faraday
+  # ```
   #
-  #   BlueKaiMiddleware::LogSubscriber.attach_to :faraday
-  #
-  # This class is intended to provide a unified logging format for http calls made using
-  # Faraday from within Rails.
+  # This class is intended to provide a unified logging format for http calls made using Faraday
+  # from within Rails.
   class LogSubscriber < ActiveSupport::LogSubscriber
-    # Creates a new LogSubscriber. +name+—which defaults to 'Faraday'—will be prepended
-    # to each emitted log line.
+    # Creates a new LogSubscriber.
+    # @param [String] name a name to be prepended to each log line
     def initialize(name = 'Faraday')
       super
       @name        = name
       @odd_or_even = false
     end
 
-    # Emits an info-level log line based on +event+.
+    # Emits an info-level log line containing this subscriber's `name` and the duration, HTTP
+    # method, and URL of a request.
+    # @param [ActiveSupport::Notifications::Event] event an event encapsulating the request
+    # @return [void]
     def request(event)
       env     = event.payload
       name    = '%s %s (%.1fms)' % [@name, env[:method].to_s.upcase, event.duration]
@@ -36,10 +40,6 @@ module BlueKaiMiddleware
       end
 
       info "  #{name}  #{request}"
-    end
-
-    def logger
-      Rails.logger
     end
 
     private
