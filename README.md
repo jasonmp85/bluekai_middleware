@@ -74,7 +74,7 @@ end
 ```
 
 You can rescue `BlueKaiMiddleware::HTTPError` for all errors, or pick
-between `BlueKaiMiddleware::ClientError` for 400-class errors and 
+between `BlueKaiMiddleware::ClientError` for 400-class errors and
 `BlueKaiMiddleware::ServerError` for 500-class ones. All errors provide
 the response body and status as attributes and have the standard HTTP
 message for their status as their exception message.
