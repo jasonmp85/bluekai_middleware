@@ -1,4 +1,4 @@
-### 0.3.3 / 2012-08-21 (unreleased)
+### 0.3.3 / 2012-08-21
 
 * Removed remaining uses of Rails methods (`try`, `Rails.logger`)
 
