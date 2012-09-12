@@ -1,3 +1,7 @@
+### 0.4.1 / 2012-09-12
+
+* Relaxed dependency constraint to allow minor versions of ActiveSupport above 3.1
+
 ### 0.4.0 / 2012-08-21
 
 * Removed `superuser` parameter from {BlueKaiMiddleware::Authenticate#initialize}
