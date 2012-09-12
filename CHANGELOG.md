@@ -1,4 +1,4 @@
-### 0.4.1 / (unreleased)
+### 0.4.1 / 2012-09-12
 
 * Relaxed dependency constraint to allow minor versions of ActiveSupport above 3.1
 
