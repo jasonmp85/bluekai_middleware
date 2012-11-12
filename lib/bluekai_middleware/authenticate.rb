@@ -26,15 +26,33 @@ module BlueKaiMiddleware
       url     = env[:url]
       context = SigningContext.new(env, @private_key)
 
-      query_keys = (url.query_values || {}).keys
-
       extra_parameters = {
         bkuid: @user_key,
         bksig: context.signature
       }
-      url.query_values = (url.query_values || {}).merge(extra_parameters)
+
+      query_hash = Authenticate.query_hash(url)
+      query_hash.merge!(extra_parameters)
+      Authenticate.build_query(url, query_hash)
 
       @app.call(env)
+    end
+
+    def self.build_query(url, query_hash)
+      if self.faraday_version_0_8?
+        query = Faraday::Utils.build_query(query_hash.sort_by { |key, value| key.to_s })
+        url.query = query
+      else
+        url.query_values = query_hash
+      end
+    end
+
+    def self.query_hash(url)
+      self.faraday_version_0_8? ? Faraday::Utils.parse_query(url.query) : (url.query_values || {})
+    end
+
+    def self.faraday_version_0_8?
+      Faraday::VERSION.start_with?('0.8')
     end
 
     # Only one Authenticate instance is created per Faraday client,
@@ -53,7 +71,10 @@ module BlueKaiMiddleware
         @body   = env[:body]
         @url    = env[:url]
         @path   = @url.path
-        @query  = (@url.query_values || {}).sort.map(&:last).map { |s| CGI.escape(s) }
+
+        # Returns an {} if the query string is empty(or nil).
+        query_hash = Authenticate.query_hash(@url)
+        @query  = query_hash.sort.map(&:last).map { |s| CGI.escape(s) }
 
         @key    = private_key
         @digest = OpenSSL::Digest.new('sha256')

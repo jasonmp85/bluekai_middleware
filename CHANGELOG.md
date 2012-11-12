@@ -1,3 +1,6 @@
+### 0.5.0 / (unreleased)
+* Upgrade gem to allow the usage of Faraday 0.8 (tested with 0.8.4)
+
 ### 0.4.1 / 2012-09-12
 
 * Relaxed dependency constraint to allow minor versions of ActiveSupport above 3.1

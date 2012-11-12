@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir['spec/**/*_spec.rb']
 
   s.add_dependency 'activesupport', '~> 3.1'
-  s.add_dependency 'faraday',       '~> 0.7.6'
+  s.add_dependency 'faraday',       '>= 0.7.6', '< 0.9.0'
   s.add_dependency 'rack',          '~> 1.3'
 
   s.add_development_dependency 'addressable', '~> 2.3.2'
