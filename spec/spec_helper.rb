@@ -1,5 +1,13 @@
 # encoding: UTF-8
 
+if ENV['SCOV']
+  require 'simplecov'
+  require 'simplecov-rcov'
+  SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
+
+  SimpleCov.start
+end
+
 require 'bluekai_middleware'
 
 # Requires supporting files with custom matchers and macros, etc,
