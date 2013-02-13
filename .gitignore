@@ -1,6 +1,7 @@
 .bundle/
 .DS_Store
 .yardoc/
+coverage/
 doc/
 Gemfile.lock
 log/*.log
