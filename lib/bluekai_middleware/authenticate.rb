@@ -26,13 +26,17 @@ module BlueKaiMiddleware
       url     = env[:url]
       context = SigningContext.new(env, @private_key)
 
-      query_keys = (url.query_values || {}).keys
+      # This reduce block is needed in order to handle array variables
+      deep_query_values = (url.query_values(Array) || []).reduce({}) do |memo, (k, v)|
+        (memo[k] ||= []) << v
+        memo
+      end
 
       extra_parameters = {
         bkuid: @user_key,
         bksig: context.signature
       }
-      url.query_values = (url.query_values || {}).merge(extra_parameters)
+      url.query_values = deep_query_values.merge(extra_parameters)
 
       @app.call(env)
     end
@@ -53,7 +57,9 @@ module BlueKaiMiddleware
         @body   = env[:body]
         @url    = env[:url]
         @path   = @url.path
-        @query  = (@url.query_values || {}).sort.map(&:last).map { |s| CGI.escape(s) }
+        @query  = (@url.query_values(Array) || {}).each_with_index.sort_by do |param, i|
+          [param.first, i] # need a stable sort by query key
+        end.map { |param, i| CGI.escape(param.last) }
 
         @key    = private_key
         @digest = OpenSSL::Digest.new('sha256')
