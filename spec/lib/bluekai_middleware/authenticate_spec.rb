@@ -55,5 +55,19 @@ describe BlueKaiMiddleware::Authenticate::SigningContext do
 
       instance.signature
     end
+
+    context 'with a repeated key in the query string' do
+      let(:url)  { Addressable::URI.parse('https://bluekai.com/Services/Test?' +
+                                          'secret=secret&name=BlueKai%20Test&secret=first_secret') }
+      let(:data) { 'POST/Services/TestBlueKai+Testsecretfirst_secret{count: 4, data: [1, 2, 3, 4]}' }
+
+      it 'should pass the correct data to the digest algorithm' do
+        OpenSSL::HMAC.should_receive(:digest)
+                     .with(an_instance_of(OpenSSL::Digest), key, data)
+                     .and_return('signed_data')
+
+        instance.signature
+      end
+    end
   end
 end

@@ -1,3 +1,7 @@
+### 0.4.2 / 2013-04-29
+
+* Query strings using repeated keys (to express arrays) now handled correctly
+
 ### 0.4.1 / 2012-09-12
 
 * Relaxed dependency constraint to allow minor versions of ActiveSupport above 3.1
