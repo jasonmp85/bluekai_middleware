@@ -7,6 +7,8 @@ require 'rspec/core'
 require 'rspec/core/rake_task'
 require 'ci/reporter/rake/rspec'
 
+require 'appraisal'
+
 RSpec::Core::RakeTask.new(:spec) { |t| t.fail_on_error = false }
 
 task :default => :spec
