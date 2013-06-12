@@ -24,6 +24,11 @@ module BlueKaiMiddleware
     # @return [void]
     def call(env)
       url     = env[:url]
+      params  = Authenticate.query_hash(url)
+
+      env[:params] = params
+      env[:path]   = url.path
+
       context = SigningContext.new(env, @private_key)
 
       extra_parameters = {
@@ -31,9 +36,7 @@ module BlueKaiMiddleware
         bksig: context.signature
       }
 
-      query_hash = Authenticate.query_hash(url)
-      query_hash.merge!(extra_parameters)
-      Authenticate.build_query(url, query_hash)
+      Authenticate.build_query(url, params.merge(extra_parameters))
 
       @app.call(env)
     end
@@ -69,11 +72,10 @@ module BlueKaiMiddleware
       def initialize(env, private_key)
         @method = (env[:method] || '').upcase
         @body   = env[:body]
-        @url    = env[:url]
-        @path   = @url.path
+        @path   = env[:path]
 
         # Returns an {} if the query string is empty(or nil).
-        query_hash = Authenticate.query_hash(@url)
+        query_hash = env[:params] || {}
         @query  = query_hash.sort.map(&:last).map { |s| CGI.escape(s) }
 
         @key    = private_key

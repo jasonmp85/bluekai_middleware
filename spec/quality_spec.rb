@@ -4,7 +4,7 @@ require 'spec_helper'
 
 INCLUDED_EXTS  = (%w[coffee css csv erb gemspec haml html js json jst
                      lock md rake rb ru sample sass scss txt xml yml] << '')
-EXCLUDED_EXTS  = %w[gif ico png tsv]
+EXCLUDED_EXTS  = %w[gemfile gif ico png tsv]
 
 # TODO: Check for newline at end of file
 # TODO: Check for encoding string at top

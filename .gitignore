@@ -29,6 +29,3 @@ doc/
 # ====================
 
 # Put project-specific ignores here.
-
-# Ignore Gemfile.lock because this is a gem
-Gemfile.lock
