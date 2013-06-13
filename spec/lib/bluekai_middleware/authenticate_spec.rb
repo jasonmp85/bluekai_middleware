@@ -42,11 +42,11 @@ describe BlueKaiMiddleware::Authenticate::SigningContext do
       method: 'post',
       body:   '{count: 4, data: [1, 2, 3, 4]}',
       path:   '/Services/Test',
-      params: { 'secret' => 'secret', 'name' => 'BlueKai Test' }
+      params: params
     }
   end
-
   let(:key) { 'a0887eca1aa61334449974fe6474671d3f2965c6' }
+  let(:params) { { 'secret' => 'secret', 'name' => 'BlueKai Test' } }
 
   let(:instance) { described_class.new(env, key) }
   subject { instance }
@@ -62,6 +62,19 @@ describe BlueKaiMiddleware::Authenticate::SigningContext do
                    .and_return('signed_data')
 
       instance.signature
+    end
+
+    context 'with a repeated key in the query string' do
+      let(:params) { {'secret' => %w[secret first_secret], 'name' => 'BlueKai Test' } }
+      let(:data) { 'POST/Services/TestBlueKai+Testsecretfirst_secret{count: 4, data: [1, 2, 3, 4]}' }
+
+      it 'should pass the correct data to the digest algorithm' do
+        OpenSSL::HMAC.should_receive(:digest)
+                     .with(an_instance_of(OpenSSL::Digest), key, data)
+                     .and_return('signed_data')
+
+        instance.signature
+      end
     end
   end
 end
