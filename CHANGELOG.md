@@ -1,5 +1,10 @@
 ### 0.5.0 / (unreleased)
+
 * Upgrade gem to allow the usage of Faraday 0.8 (tested with 0.8.4)
+
+### 0.4.2 / 2013-04-29
+
+* Query strings using repeated keys (to express arrays) now handled correctly
 
 ### 0.4.1 / 2012-09-12
 

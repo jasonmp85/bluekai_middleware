@@ -58,7 +58,6 @@ module BlueKaiMiddleware
         @body   = env[:body]
         @path   = env[:path]
 
-        # Returns an {} if the query string is empty(or nil).
         query_hash = env[:params] || {}
         @query  = query_hash.sort.map(&:last).map do |v|
           [v].flatten.map { |e| CGI.escape(e) }
