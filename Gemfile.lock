@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bluekai_middleware (0.5.0.rc)
+    bluekai_middleware (0.5.0.rc3)
       activesupport (~> 3.1)
       faraday (>= 0.7.6, < 0.9.0)
       rack (~> 1.3)
