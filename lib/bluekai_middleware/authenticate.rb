@@ -24,15 +24,20 @@ module BlueKaiMiddleware
     # @return [void]
     def call(env)
       url     = env[:url]
-      context = SigningContext.new(env, @private_key)
+      params  = Faraday::Utils.parse_query(url.query)
 
-      query_keys = (url.query_values || {}).keys
+      env[:params] = params
+      env[:path]   = url.path
+
+      context = SigningContext.new(env, @private_key)
 
       extra_parameters = {
         bkuid: @user_key,
         bksig: context.signature
       }
-      url.query_values = (url.query_values || {}).merge(extra_parameters)
+
+      new_params = params.merge(extra_parameters)
+      url.query  = Faraday::Utils.build_query(new_params.sort_by { |key, value| key.to_s })
 
       @app.call(env)
     end
@@ -51,9 +56,12 @@ module BlueKaiMiddleware
       def initialize(env, private_key)
         @method = (env[:method] || '').upcase
         @body   = env[:body]
-        @url    = env[:url]
-        @path   = @url.path
-        @query  = (@url.query_values || {}).sort.map(&:last).map { |s| CGI.escape(s) }
+        @path   = env[:path]
+
+        query_hash = env[:params] || {}
+        @query  = query_hash.sort.map(&:last).map do |v|
+          [v].flatten.map { |e| CGI.escape(e).gsub(/\+/, '%20') }
+        end
 
         @key    = private_key
         @digest = OpenSSL::Digest.new('sha256')

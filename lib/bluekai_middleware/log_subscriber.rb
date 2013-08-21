@@ -18,7 +18,7 @@ module BlueKaiMiddleware
     # Creates a new LogSubscriber.
     # @param [String] name a name to be prepended to each log line
     def initialize(name = 'Faraday')
-      super
+      super()
       @name        = name
       @odd_or_even = false
     end

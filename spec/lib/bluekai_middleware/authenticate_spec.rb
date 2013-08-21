@@ -14,9 +14,9 @@ describe BlueKaiMiddleware::Authenticate do
   describe '#call' do
     describe 'the url parameter' do
       let(:env)       { {url: url} }
-      let(:signature) { 'signature!' }
+      let(:signature) { 'fakesignature' }
 
-      let(:url)       { Addressable::URI.parse('https://bluekai.com/Services/Test') }
+      let(:url)       { Faraday::Connection.new.build_url('https://bluekai.com/Services/Test') }
       subject         { url }
 
       context 'after being processed by the middleware' do
@@ -29,24 +29,32 @@ describe BlueKaiMiddleware::Authenticate do
           instance.call(env)
         end
 
-        its(:query_values) { should include('bkuid' => user, 'bksig' => signature) }
+        its(:query) { should include("bkuid=#{user}") }
+        its(:query) { should include("bksig=#{signature}") }
       end
     end
   end
 end
 
 describe BlueKaiMiddleware::Authenticate::SigningContext do
-  let(:url) { Addressable::URI.parse('https://bluekai.com/Services/Test?secret=secret&name=BlueKai%20Test') }
-  let(:env) { {method: 'post', body: '{count: 4, data: [1, 2, 3, 4]}', url: url} }
+  let(:env) do
+    {
+      method: 'post',
+      body:   '{count: 4, data: [1, 2, 3, 4]}',
+      path:   '/Services/Test',
+      params: params
+    }
+  end
   let(:key) { 'a0887eca1aa61334449974fe6474671d3f2965c6' }
+  let(:params) { { 'secret' => 'secret', 'name' => 'BlueKai Test' } }
 
   let(:instance) { described_class.new(env, key) }
   subject { instance }
 
-  its(:signature) { should eq 'JfZ2rjdvZzYn183h/WeDluZ43clCONo+LNE7LQjAqBk=' }
+  its(:signature) { should eq 'nO1vnK0sJAm3VkByZ7KJ3/xaugLS/d6lgB7vOS0fKyg=' }
 
   describe '#signature' do
-    let(:data) { 'POST/Services/TestBlueKai+Testsecret{count: 4, data: [1, 2, 3, 4]}' }
+    let(:data) { 'POST/Services/TestBlueKai%20Testsecret{count: 4, data: [1, 2, 3, 4]}' }
 
     it 'should pass the correct data to the digest algorithm' do
       OpenSSL::HMAC.should_receive(:digest)
@@ -54,6 +62,19 @@ describe BlueKaiMiddleware::Authenticate::SigningContext do
                    .and_return('signed_data')
 
       instance.signature
+    end
+
+    context 'with a repeated key in the query string' do
+      let(:params) { {'secret' => %w[secret first_secret], 'name' => 'BlueKai Test' } }
+      let(:data) { 'POST/Services/TestBlueKai%20Testsecretfirst_secret{count: 4, data: [1, 2, 3, 4]}' }
+
+      it 'should pass the correct data to the digest algorithm' do
+        OpenSSL::HMAC.should_receive(:digest)
+                     .with(an_instance_of(OpenSSL::Digest), key, data)
+                     .and_return('signed_data')
+
+        instance.signature
+      end
     end
   end
 end
