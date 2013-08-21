@@ -4,6 +4,7 @@ require 'rack/utils'
 # This module contains cross-cutting code useful when interacting with any number of BlueKai services.
 module BlueKaiMiddleware
   autoload :Authenticate,  'bluekai_middleware/authenticate'
+  autoload :AuthenticateOnBehalfOf,  'bluekai_middleware/authenticate_on_behalf_of'
   autoload :LogSubscriber, 'bluekai_middleware/log_subscriber'
   autoload :RaiseError,    'bluekai_middleware/raise_error'
 
