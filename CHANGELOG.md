@@ -1,6 +1,9 @@
-### 0.5.0 / (unreleased)
+### 0.5.0 / 2013-08-21
 
 * Upgrade gem to allow the usage of Faraday 0.8 (tested with 0.8.4)
+
+* Modified {BlueKaiMiddleware::Authenticate} to encode spaces as `%20` rather than `+` in response
+  to changes in the expectations of Java services
 
 ### 0.4.2 / 2013-04-29
 
