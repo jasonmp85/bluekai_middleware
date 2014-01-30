@@ -11,12 +11,12 @@ module BlueKaiMiddleware
     # @param [Hash] env a hash with details about the response
     # @return [void]
     def on_complete(env)
-      status, body = *env.values_at(:status, :body)
+      status, body, url = *env.values_at(:status, :body, :url)
 
       if status >= 400
         type = (status >= 500) ? ServerError : ClientError
 
-        raise type.new(status, body)
+        raise type.new(status, body, url)
       end
     end
 
