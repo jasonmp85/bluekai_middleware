@@ -1,3 +1,7 @@
+### 0.5.1 / 2014-01-31
+
+* Add request url to error objects for better logging
+
 ### 0.5.0 / 2013-08-21
 
 * Upgrade gem to allow the usage of Faraday 0.8 (tested with 0.8.4)
