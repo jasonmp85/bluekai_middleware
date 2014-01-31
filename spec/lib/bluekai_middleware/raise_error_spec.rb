@@ -9,7 +9,7 @@ describe BlueKaiMiddleware::RaiseError do
   it { should be_a_kind_of Faraday::Response::Middleware }
 
   describe '#on_complete' do
-    let(:response)     { { status: status, body: 'Document body' } }
+    let(:response)     { { status: status, body: 'Document body', url: 'http://wwww.bluekai.test/some/path?with_params' } }
     let(:on_complete) { instance.on_complete(response) }
     subject { on_complete }
 
