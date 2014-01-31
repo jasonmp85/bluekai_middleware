@@ -6,28 +6,31 @@ require 'openssl'
 require 'faraday'
 
 module BlueKaiMiddleware
-  # Implements BlueKai's {http://kb.bluekai.com/display/PD/Authentication+and+Authorization
-  # signing algorithm} in order to facilitate making authenticated calls to BlueKai web services.
+  # Implements BlueKai's
+  # {http://kb.bluekai.com/display/PD/Authentication+and+Authorization
+  # signing algorithm} in order to facilitate making authenticated calls to
+  # BlueKai web services.
   class Authenticate < Faraday::Middleware
     # Creates a new Authenticate middleware instance.
     # @param [#call] app the next middleware in the chain, or the innermost app
-    # @param [String] user_key a BlueKai user's public key, to be included in the params
-    # @param [String] private_key a BlueKai user's private key, to be used for signing
+    # @param [String] user_key a BlueKai user's public key
+    # @param [String] private_key a BlueKai user's private key,
+    #   to be used for signing
     def initialize(app, user_key, private_key)
       super(app)
       @user_key, @private_key = user_key, private_key
     end
 
-    # Calculates the signature (`bksig`) and adds it and a user key (`bkuid`) to the outgoing
-    # request's query parameters. No computation is performed during the response phase.
+    # Calculates the signature (`bksig`) and adds it and a user key (`bkuid`)
+    # to the outgoing request's query parameters. No computation is performed
+    # during the response phase.
     # @param [Hash] env a hash with details about the request
     # @return [void]
     def call(env)
-      url     = env[:url]
-      params  = Faraday::Utils.parse_query(url.query)
+      params  = Faraday::Utils.parse_query(env[:url].query)
 
       env[:params] = params
-      env[:path]   = url.path
+      env[:path]   = env[:url].path
 
       context = SigningContext.new(env, @private_key)
 
@@ -37,7 +40,9 @@ module BlueKaiMiddleware
       }
 
       new_params = params.merge(extra_parameters)
-      url.query  = Faraday::Utils.build_query(new_params.sort_by { |key, value| key.to_s })
+      env[:url].query  = Faraday::Utils.build_query(
+          new_params.sort_by { |key, value| key.to_s }
+      )
 
       @app.call(env)
     end
@@ -52,7 +57,8 @@ module BlueKaiMiddleware
 
       # Creates a new SigningContext.
       # @param [Hash] env a hash with details about the request
-      # @param [String] private_key a BlueKai user's private key, to be used for signing
+      # @param [String] private_key a BlueKai user's private key,
+      #   to be used for signing
       def initialize(env, private_key)
         @method = (env[:method] || '').upcase
         @body   = env[:body]
