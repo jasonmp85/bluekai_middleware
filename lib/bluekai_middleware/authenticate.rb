@@ -66,7 +66,7 @@ module BlueKaiMiddleware
 
         query_hash = env[:params] || {}
         @query  = query_hash.sort.map(&:last).map do |v|
-          [v].flatten.map { |e| CGI.escape(e).gsub(/\+/, '%20') }
+          [v].flatten.map { |e| CGI.escape(e) }
         end
 
         @key    = private_key
