@@ -27,7 +27,8 @@ module BlueKaiMiddleware
     # @param [Hash] env a hash with details about the request
     # @return [void]
     def call(env)
-      params  = Faraday::Utils.parse_query(env[:url].query)
+      # Faraday 0.9.x apparently returns a nil instead of an empty hash
+      params  = Faraday::Utils.parse_query(env[:url].query) || {}
 
       env[:params] = params
       env[:path]   = env[:url].path
