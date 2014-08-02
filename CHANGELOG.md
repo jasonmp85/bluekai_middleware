@@ -1,4 +1,4 @@
-### 0.7.0.rc1 / 2014-06-19
+### 0.6.1 / 2014-08-01
 
 * Loosen spec to allow for Ruby 2.1 and Faraday 0.9.0
 
