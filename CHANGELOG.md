@@ -1,3 +1,11 @@
+### 0.6.1 / 2014-08-01
+
+* Loosen spec to allow for Ruby 2.1 and Faraday 0.9.0
+
+### 0.6.0 / 2014-02-27
+
+* Fix for search with whitespace
+
 ### 0.5.1 / 2014-01-31
 
 * Add request url to error objects for better logging

@@ -6,7 +6,8 @@ describe BlueKaiMiddleware::Authenticate do
   let(:app)    { double('app') }
   let(:signer) { double('signer') }
   let(:user)   { 'c66ec890601f16fdb53ae29525c9eb12fdc04746' }
-  let(:key)    { 'a0887eca1aa61334449974fe6474671d3f2965c6' }
+  let(:key)    { 'fakekey' }
+  let(:private_key) { 'fakesecretkey' }
 
   let(:instance) { described_class.new(app, user, key) }
   subject { instance }
@@ -16,7 +17,11 @@ describe BlueKaiMiddleware::Authenticate do
       let(:env)       { {url: url} }
       let(:signature) { 'fakesignature' }
 
-      let(:url)       { Faraday::Connection.new.build_url('https://bluekai.com/Services/Test') }
+      let(:url) do
+        Faraday::Connection.new do |faraday|
+          faraday.use BlueKaiMiddleware::Authenticate, key, private_key
+        end.build_url('https://bluekai.com/Services/Test')
+      end
       subject         { url }
 
       context 'after being processed by the middleware' do
